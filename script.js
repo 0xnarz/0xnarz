@@ -1,47 +1,27 @@
-// Check if posts exist in localStorage, if not, create an empty array
-let posts = JSON.parse(localStorage.getItem('posts')) || [];
+// Get elements from the DOM
+const startCodeInput = document.getElementById('startCode');
+const middleCodeInput = document.getElementById('middleCode');
+const endCodeInput = document.getElementById('endCode');
+const submitBtn = document.getElementById('submitBtn');
+const resultCode = document.getElementById('resultCode');
+const copyBtn = document.getElementById('copyBtn');
 
-// Function to display posts
-function displayPosts() {
-    const postContainer = document.getElementById('post-container');
-    postContainer.innerHTML = '';
+// Function to generate code
+submitBtn.addEventListener('click', function() {
+    const startCode = startCodeInput.value.trim();
+    const middleCode = middleCodeInput.value.trim();
+    const endCode = endCodeInput.value.trim();
 
-    posts.forEach(post => {
-        const postDiv = document.createElement('div');
-        postDiv.classList.add('post');
+    // Combine the code fragments
+    const generatedCode = `${startCode}\n${middleCode}\n${endCode}`;
 
-        const postTime = document.createElement('div');
-        postTime.classList.add('post-time');
-        postTime.innerText = post.time;
+    // Display the generated code in the result textarea
+    resultCode.value = generatedCode;
+});
 
-        const postContent = document.createElement('div');
-        postContent.innerText = post.content;
-
-        postDiv.appendChild(postTime);
-        postDiv.appendChild(postContent);
-
-        postContainer.appendChild(postDiv);
-    });
-}
-
-// Display posts on homepage
-if (document.getElementById('post-container')) {
-    displayPosts();
-}
-
-// Admin Post Functionality
-if (document.getElementById('post-button')) {
-    document.getElementById('post-button').addEventListener('click', function () {
-        const postContent = document.getElementById('post-content').value;
-        const time = new Date().toLocaleString();
-
-        if (postContent) {
-            posts.push({ content: postContent, time: time });
-            localStorage.setItem('posts', JSON.stringify(posts));
-            alert('Post published!');
-            document.getElementById('post-content').value = '';
-        } else {
-            alert('Please write something to post.');
-        }
-    });
-}
+// Function to copy the code to clipboard
+copyBtn.addEventListener('click', function() {
+    resultCode.select();
+    document.execCommand('copy');
+    alert('Code copied to clipboard!');
+});
