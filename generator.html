@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Code Generator Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>HTML Code Generator Tool</h1>
+
+        <label for="startCode">Start Code:</label>
+        <textarea id="startCode" placeholder="Enter start code... (e.g., &lt;div&gt; &lt;h1&gt;)"></textarea>
+
+        <label for="middleCode">Middle Content (Text or Code):</label>
+        <textarea id="middleCode" placeholder="Enter middle content... (e.g., a paragraph or code)"></textarea>
+
+        <label for="endCode">End Code:</label>
+        <textarea id="endCode" placeholder="Enter end code... (e.g., &lt;/h1&gt; &lt;/div&gt;)"></textarea>
+
+        <button id="submitBtn">Generate Code</button>
+
+        <h2>Generated Code:</h2>
+        <div id="resultContainer">
+            <textarea id="resultCode" readonly></textarea>
+            <button id="copyBtn">Copy Code</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
