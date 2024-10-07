@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -6,43 +7,99 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
-    color: white; /* Text color for better contrast */
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background for both pages */
+    color: white;
+    min-height: 100vh; /* Ensure the body takes full height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
-    max-width: 600px;
-    margin: 100px auto; /* Centering the container vertically */
+    max-width: 800px;
+    margin: 30px;
     padding: 30px;
-    background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
-    text-align: center; /* Centering text */
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
-h1 {
-    font-size: 2.5em; /* Larger font size */
+/* Headings */
+h1, h2 {
+    color: white;
+    font-size: 2.5em;
     margin-bottom: 20px;
 }
 
 .description {
-    font-size: 1.2em; /* Slightly larger font for description */
+    font-size: 1.2em;
     margin-bottom: 30px;
 }
 
-.button {
+/* Input and Textarea Styling */
+label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: white;
+}
+
+textarea, input {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent inputs */
+    color: white;
+}
+
+textarea::placeholder, input::placeholder {
+    color: #ddd;
+}
+
+/* Button Styling */
+button, .button {
     display: inline-block;
     padding: 15px 30px;
-    font-size: 18px; /* Bigger font size for button */
+    font-size: 18px;
     color: #fff;
-    background-color: #007bff; /* Button background */
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Rounded button */
-    transition: background-color 0.3s, transform 0.2s; /* Transition for effects */
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-    transform: scale(1.05); /* Slightly enlarge button on hover */
+button:hover, .button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
+#copyBtn {
+    margin-top: 10px;
+}
+
+/* Result Area Styling */
+#resultCode {
+    width: 100%;
+    height: 150px;
+    font-family: monospace;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.2); /* Transparent code area */
+    border: 1px solid #ddd;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    resize: none;
+}
+
+/* Add some margin to the generated code section */
+#resultContainer {
+    margin-top: 30px;
+}
