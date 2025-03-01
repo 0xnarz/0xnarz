@@ -3,14 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Tools Homepage</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ENS Minter</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.5/dist/web3.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>HTML Code Generator Tool</h1>
-        <p class="description">Welcome to the HTML Code Generator Tool. Easily create custom HTML snippets by combining code blocks!</p>
-        <a href="generator.html" class="button">Go to Code Generator Tool</a>
+
+    <h1>ENS Minter</h1>
+
+    <div id="status"></div>
+
+    <div>
+        <label for="name">Enter Name:</label>
+        <input type="text" id="name" placeholder="example.eth">
     </div>
+
+    <div>
+        <label for="duration">Duration (seconds):</label>
+        <input type="number" id="duration" value="31536000">
+    </div>
+
+    <div>
+        <button onclick="registerName()">Register Name</button>
+    </div>
+
+    <script>
+        const contractABI = [{"inputs":[{"internalType":"contract BaseRegistrarImplementation","name":"_base","type":"address"},{"internalType":"contract IPriceOracle","name":"_prices","type":"address"},{"internalType":"contract ReverseRegistrar","name":"_reverseRegistrar","type":"address"},{"internalType":"contract ENS","name":"_ens","type":"address"}],"name":"","outputs":null,"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"InsufficientValue","outputs":null,"stateMutability":"","type":"error"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","outputs":null,"stateMutability":"","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","outputs":null,"stateMutability":"","type":"error"},{"inputs":[{"indexed":false,"internalType":"string","name":"name","type":"string"},{"indexed":true,"internalType":"bytes32","name":"label","type":"bytes32"},{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"baseCost","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"premium","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"expires","type":"uint256"}],"name":"NameRegistered","outputs":null,"stateMutability":"","type":"event"},{"inputs":[{"indexed":false,"internalType":"string","name":"name","type":"string"},{"indexed":true,"internalType":"bytes32","name":"label","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"cost","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"expires","type":"uint256"}],"name":"NameRenewed","outputs":null,"stateMutability":"","type":"event"},{"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","outputs":null,"stateMutability":"","type":"event"},{"inputs":[],"name":"MIN_REGISTRATION_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"}],"name":"available","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"prices","outputs":[{"internalType":"contract IPriceOracle","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"recoverFunds","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"duration","type":"uint256"},{"internalType":"address","name":"resolver","type":"address"},{"internalType":"bytes[]","name":"data","type":"bytes[]"},{"internalType":"bool","name":"reverseRecord","type":"bool"}],"name":"register","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"duration","type":"uint256"}],"name":"renew","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"duration","type":"uint256"}],"name":"rentPrice","outputs":[{"internalType":"struct IPriceOracle.Price","name":"price","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"reverseRegistrar","outputs":[{"internalType":"contract ReverseRegistrar","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract IPriceOracle","name":"_prices","type":"address"}],"name":"setPriceOracle","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceID","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"}],"name":"valid","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"pure","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+
+        const contractAddress = "0x04894Bf8F0ca6370C0fd8F5FCE3158033b46d979"; // Replace with your contract address
+        let web3;
+        let contract;
+
+        // Check if MetaMask is available
+        if (typeof window.ethereum !== 'undefined') {
+            web3 = new Web3(window.ethereum);
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+            document.getElementById("status").innerText = "MetaMask is connected!";
+        } else {
+            document.getElementById("status").innerText = "Please install MetaMask!";
+        }
+
+        // Function to handle registration
+        async function registerName() {
+            const name = document.getElementById("name").value;
+            const duration = document.getElementById("duration").value;
+            
+            // Get accounts from MetaMask
+            const accounts = await web3.eth.getAccounts();
+
+            if (accounts.length === 0) {
+                alert("No accounts found. Please log in to MetaMask.");
+                return;
+            }
+
+            const owner = accounts[0];
+            const resolver = "0x0000000000000000000000000000000000000000"; // Replace with your resolver address
+            const data = []; // Data could be custom, leaving empty for now
+            const reverseRecord = false; // Set this as needed
+
+            try {
+                await contract.methods.register(name, owner, duration, resolver, data, reverseRecord)
+                    .send({ from: owner, value: web3.utils.toWei('0.1', 'ether') }); // Adjust value if needed
+
+                alert(`Name ${name} registered successfully!`);
+            } catch (error) {
+                console.error(error);
+                alert("An error occurred during registration.");
+            }
+        }
+    </script>
 </body>
 </html>
